@@ -1,4 +1,2 @@
-/out/*
-/.vs/*
-
+./.vs/DontGetAngryProject/v17/*
 *.exe
