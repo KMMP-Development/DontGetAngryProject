@@ -1,6 +1,10 @@
 #include <SFML/Graphics.hpp>
-#include "shape.h"
-#include "menu.h"
+#include "shape.hpp"
+#include "menu.hpp"
+#include "InputManager.hpp"
+#include <iostream>
+
+
 
 int main()
 {
@@ -9,19 +13,19 @@ int main()
     sf::RenderWindow app(sf::VideoMode(800, 600), "Chinczyk v1"/*,sf::Style::Fullscreen*/);
     ShapeClass shape;
     MenuClass menu;
+    sf::Clock clock;
+    InputManager inputManager(app, menu);
 
 	// Start the game loop
     while (app.isOpen())
     {
         // Process events
-        sf::Event event;
-        while (app.pollEvent(event))
-        {
-            // Close window : exit
-            if (event.type == sf::Event::Closed)
-                app.close();
-        }
 
+        inputManager.processEvents();
+
+
+
+        sf::Time elapsed=clock.restart();
         // Clear screen
         app.clear();
 
