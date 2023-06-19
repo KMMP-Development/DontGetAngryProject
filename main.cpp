@@ -21,7 +21,7 @@ int main()
     {
         // Process events
 
-        inputManager.processEvents();
+        inputManager.processEvents();//obsluga klawiatury i myszy
 
 
 
@@ -29,7 +29,7 @@ int main()
         // Clear screen
         app.clear();
 
-        //Draw the sprite
+        //Rysowanie spritow
         shape.drawShapes(app);
         menu.drawShapes(app);
         // Update the window
