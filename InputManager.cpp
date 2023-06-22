@@ -25,6 +25,7 @@ void InputManager::processEvents(){
                     std::cout<<"x: \t"<<mousePosition.x<<"y: \t"<<mousePosition.y<<std::endl;
                     //board.testMetaFlagStatus();
                     board.testFlagStatus();
+                    board.testMetaFlagStatus();
                     //std::cout<<"r: "<<board.getPawnFieldRealId(0,0)<<"\tb: "<<board.getPawnFieldRealId(1,0)<<std::endl;
 
                     //board.destroyPawn(1,1,2,2);//testowe do usuniecia (przy drugim uzyciu wyjdzie poza tablice fieldFlags bo pionek nie bedzie na sciezce

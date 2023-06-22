@@ -92,7 +92,7 @@ void Board::movePawn(int player_id, int pawn_id, short moveDistance){
                     if (field_id_to_compare>39)
                         field_id_to_compare-=40;
                 short status=compareFieldWithPlayer(field_id_to_compare, player_id);
-                std::cout<<"FlagField = "<<field_id_to_compare<<"\t status"<<status<<std::endl;
+                //std::cout<<"FlagField = "<<field_id_to_compare<<"\t status"<<status<<std::endl;
                 if(status!=1){
                     if(status==2){
                         std::cout<<"path occupied pawn destroyed"<<std::endl;
@@ -115,6 +115,7 @@ void Board::movePawn(int player_id, int pawn_id, short moveDistance){
                 if(fieldMetaFlags[player_id][whereIsPawn_tmp+moveDistance-44].isOccupied==false){
                     fieldMetaFlags[player_id][whereIsPawn_tmp+moveDistance-44].isOccupied=true;
                     removeFieldMetaFlagStatus(whereIsPawn_tmp, player_id);
+
                     pawnFieldId[player_id][pawn_id]+=moveDistance;
                 }
                 else{
@@ -174,9 +175,10 @@ void Board::nextPlayerTurn(){
 }
 
 void Board::destroyPawn(int flag_field_id){
+    testFlagStatus();
     pawnFieldId[fieldFlags[flag_field_id].playerId][fieldFlags[flag_field_id].pawnId]=fieldFlags[flag_field_id].pawnId;
     fieldFlags[flag_field_id].isOccupied=false;
-    std::cout<<"pawn destroyed on fieldFlag: "<<flag_field_id<<std::endl;
+    std::cout<<"destroyed on fieldFlag: "<<flag_field_id<<std::endl;
     sound.play_sword();
     //setFieldFlagStatus(getPawnFieldRealId(destroyed_player_id, destroyed_pawn_id), by_player_id, by_pawn_id);
     //pawnFieldId[destroyed_player_id][destroyed_pawn_id]=destroyed_pawn_id;
@@ -214,12 +216,20 @@ void Board::removeFieldFlagStatus(int field_real_id){
 void Board::removeFieldMetaFlagStatus(int field_real_id, int player_id){
     if (field_real_id>43&&field_real_id<48){
             fieldMetaFlags[player_id][field_real_id-44].isOccupied=false;
+            std::cout<<player_id<<" ruch na polach mety z "<<field_real_id<<"("<<field_real_id-44<<")"<<std::endl;;
     }
-    else removeFieldFlagStatus(field_real_id);
+    else{
+            int tmp_flag_pos=field_real_id+player_id*offset_player_fields;
+            if (tmp_flag_pos>43)
+                tmp_flag_pos-=40;
+            removeFieldFlagStatus(tmp_flag_pos);//---------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------------------------------------------------------------------
+            std::cout<<player_id<<"po wejsciu na mete usunieto flage z pola: "<<tmp_flag_pos<<"\t rzeczywiste pole: "<<field_real_id<<std::endl;
+    }
 }
 
 void Board::testFlagStatus(){
     for (int i=0; i<40;i++){
+            if(fieldFlags[i].isOccupied)
             std::cout<<i<<"("<<i+4<<"): "<<fieldFlags[i].isOccupied<<fieldFlags[i].playerId<<fieldFlags[i].pawnId<<std::endl;;
     }
 }
