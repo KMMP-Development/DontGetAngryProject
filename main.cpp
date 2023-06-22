@@ -10,7 +10,6 @@
 //#define resolution_x 1024
 //#define resolution_y 760
 
-
 int main()
 {
 

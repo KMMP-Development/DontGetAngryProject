@@ -1,6 +1,8 @@
 #include "menu.hpp"
 
 MenuClass::MenuClass(Board& board, ShapeClass& shape):board(board), shape(shape) {
+
+
         menuBackground.setSize(sf::Vector2f(200, 600));
         menuButton.setSize(sf::Vector2f(200, 40));
         menuBackground.setFillColor(sf::Color(80,80,80,150));
@@ -8,7 +10,7 @@ MenuClass::MenuClass(Board& board, ShapeClass& shape):board(board), shape(shape)
         menuButtonSelected.setFillColor(sf::Color(200,200,200,150));
 
         menuDieceBoard.setSize(sf::Vector2f(200, 200));
-        menuDieceBoard.setFillColor(sf::Color(200,200,200,255));
+        menuDieceBoard.setFillColor(sf::Color(80,60,50,255));
 
         for (int i=0;i<6;i++){
             std::string filename="kosc"+std::to_string(i)+".png";
@@ -38,23 +40,27 @@ void MenuClass::drawShapes(sf::RenderWindow& window) {
             window.draw(dieceVisual[board.checkDiece()].diece_sprite);
 
             //kolory przyciskow
-            switch (board.getPlayerTurn()){
-                case 0://czerwony
-                    //menuBackground.setFillColor(sf::Color(200,80,80,150));
-                    menuButton.setFillColor(sf::Color(220,100,100,255));
-                    break;
-                case 1://niebieski
-                    //menuBackground.setFillColor(sf::Color(80,80,210,150));
-                    menuButton.setFillColor(sf::Color(100,100,230,255));
-                    break;
-                case 2://zielony
-                    //menuBackground.setFillColor(sf::Color(80,200,150,150));
-                    menuButton.setFillColor(sf::Color(100,220,170,255));
-                    break;
-                case 3://zolty
-                    //menuBackground.setFillColor(sf::Color(180,180,0,150));
-                    menuButton.setFillColor(sf::Color(200,200,0,255));
-                    break;
+            if(getIsMenuActive()){
+                switch (board.getPlayerTurn()){
+                    case 0://czerwony
+                        //menuBackground.setFillColor(sf::Color(200,80,80,150));
+                            menuButton.setFillColor(sf::Color(220,100,100,255));
+                        break;
+                    case 1://niebieski
+                        //menuBackground.setFillColor(sf::Color(80,80,210,150));
+                        menuButton.setFillColor(sf::Color(100,100,230,255));
+                        break;
+                    case 2://zielony
+                        //menuBackground.setFillColor(sf::Color(80,200,150,150));
+                        menuButton.setFillColor(sf::Color(100,220,170,255));
+                        break;
+                    case 3://zolty
+                        //menuBackground.setFillColor(sf::Color(180,180,0,150));
+                        menuButton.setFillColor(sf::Color(200,200,0,255));
+                        break;
+                }
+            }else{
+                menuButton.setFillColor(sf::Color(100,100,100,255));
             }
 
             //kursor
@@ -93,21 +99,30 @@ void MenuClass::drawShapes(sf::RenderWindow& window) {
     text.setPosition(605,455);
     window.draw(text);
 
-    }
+}
 
 void MenuClass::selecton_decrase(){
-        if (select>0)
-            select=select-1;
-        else
-            select=3;
-    }
+    sound.play_select();
+    if (select>0)
+        select=select-1;
+    else
+        select=3;
+}
 
 void MenuClass::selecton_incrase(){
-        if (select<3)
-            select=select+1;
-        else
-            select=0;
-    }
+    sound.play_select();
+    if (select<3)
+        select=select+1;
+    else
+        select=0;
+}
+
+void MenuClass::selectionAccept(){
+    sound.play_move();
+    board.movePawn(board.getPlayerTurn(),getSelection(),board.checkDiece()+1);
+    board.throwDiece();
+    board.nextPlayerTurn();
+}
 
 bool MenuClass::getIsMenuActive(){
     return isMenuActive;
